@@ -1,34 +1,25 @@
+import java.util.Random;
+
 public class Main {
     public static void main(String[] args) {
-        MyArrayList<Integer> mylist = new MyArrayList();
+        MyHashTable<MyTestingClass, Student> table = new MyHashTable<>();
+        Random random = new Random();
 
-        mylist.add(1);
-        mylist.add(2);
-        mylist.add(3);
-        mylist.add(4);
-        mylist.add(5);
-
-        for (int i = 0; i < mylist.size(); i++) {
-            System.out.println(mylist.get(i));
+        for (int i = 0; i < 10_000; i++) {
+            int id = random.nextInt(1000);
+            String name = "Name" + random.nextInt(100);
+            MyTestingClass key = new MyTestingClass(id, name);
+            Student value = new Student("Student" + i, 18 + random.nextInt(10));
+            table.put(key, value);
         }
 
-        System.out.println(mylist.size());
-        System.out.println();
-        MyLinkedList<String> linklist = new MyLinkedList<>();
+        printBucketDistribution(table);
+    }
 
-        linklist.add("A");
-        linklist.add("B");
-        linklist.add("C");
-        linklist.add("D");
-
-        System.out.println("2:"+linklist.get(2));
-        System.out.println("size before remove " + linklist.size());
-
-        linklist.remove(1);
-        System.out.println("1 sfter now: " + linklist.get(1));
-        System.out.println("size after remove: " + linklist.size());
-
-        linklist.clear();
-        System.out.println("size clear: " + linklist.size());
+    private static void printBucketDistribution(MyHashTable<MyTestingClass, Student> table) {
+        int[] bucketSizes = table.getBucketSizes();
+        for (int i = 0; i < bucketSizes.length; i++) {
+            System.out.println("Bucket " + i + ": " + bucketSizes[i] + " elements");
+        }
     }
 }
